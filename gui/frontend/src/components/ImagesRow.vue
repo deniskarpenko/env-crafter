@@ -12,7 +12,12 @@
     </div>
     <div class="tag-list" :class="{ hidden: !isOpen }">
       <div v-for="tagRow in chunkedTags" class="tag-row">
-        <span v-for="tag in tagRow" class="tag">{{ tag.TagName }}</span>
+        <span
+            v-for="tag in tagRow"
+            class="tag"
+            :class="{selected : selectedTag?.TagName === tag.TagName }"
+            @click="onTagClick(tag)"
+        >{{ tag.TagName }}</span>
       </div>
     </div>
   </div>
@@ -63,7 +68,7 @@ const onImageClick = (image: ImageOption): void => {
 }
 
 const onTagClick = (tag: TagOption): void => {
-  if (isOpen.value) {
+  if (!isOpen.value) {
     return;
   }
 
@@ -152,5 +157,16 @@ const chunkedTags = computed(() => {
   border: 1px solid #ddd;
   font-size: 14px;
   cursor: pointer;
+}
+.tag:hover {
+  transform: scale(1.05);
+  border-color: #ccc;
+}
+
+.tag.selected {
+  transform: scale(1.1);
+  border-color: #007bff;
+  background-color: #a0c5ef;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
 }
 </style>
