@@ -6,7 +6,13 @@
           title="Backend"
           :images="backendOptions"
           :tags="backendTags"
-          @image-selected="imageSelectedHandler"
+          @update:model-value="updateBackendModelHandler"
+      ></images-row>
+      <images-row
+          title="SQL"
+          :images="sqlOptions"
+          :tags="sqlTags"
+          @update:model-value="updateSQLModelHandler"
       ></images-row>
     </template>
   </Tabs>
@@ -94,8 +100,12 @@ watch(() => sqlModel.value?.image, async  (newImage) => {
   }
 });
 
-const imageSelectedHandler = (value: ImageOption) => {
-  backendModel.value.image = value;
+const updateBackendModelHandler = (value: ImageWithTag) => {
+  backendModel.value = value;
+}
+
+const updateSQLModelHandler = (value: ImageWithTag) => {
+  sqlModel.value = value;
 }
 
 onMounted(async () => {

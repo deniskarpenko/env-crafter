@@ -26,17 +26,18 @@
 import {ImageOption} from "../types/ImageOption";
 import {TagOption} from "../types/TagOption";
 import { ref, computed } from "vue";
+import {ImageWithTag} from "../types/ImageWithTag";
 
 interface Props {
   images: ImageOption[];
   tags: TagOption[];
   title: string;
+  modelValue?: ImageWithTag
 }
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  imageSelected: [image: ImageOption],
-  tagSelected: [tag: TagOption],
+  'update:modelValue': [value: ImageWithTag]
 }>();
 
 const isOpen = ref(true);
@@ -57,6 +58,14 @@ const getSrcForImage = (image: ImageOption): string => {
   return  `/images/tech/${image.docker_image}.svg`;
 };
 
+const updateModel = () => {
+  const newValue: ImageWithTag = {
+    image: selectedImage.value,
+    tag: selectedTag.value
+  };
+  emit('update:modelValue', newValue);
+};
+
 const onImageClick = (image: ImageOption): void => {
   if (!isOpen.value) {
     return;
@@ -64,7 +73,7 @@ const onImageClick = (image: ImageOption): void => {
 
   selectedImage.value = image;
 
-  emit('imageSelected', image);
+  updateModel();
 }
 
 const onTagClick = (tag: TagOption): void => {
@@ -74,7 +83,7 @@ const onTagClick = (tag: TagOption): void => {
 
   selectedTag.value = tag;
 
-  emit('tagSelected', tag);
+ updateModel();
 }
 
 const chunkedTags = computed(() => {
