@@ -32,8 +32,9 @@ Spinning up dev environments with Docker should be fast and painless. Whether yo
 
 ## 🧑‍💻 Built With
 
-- [Go](https://go.dev/) — core logic and backend
-- [Wails](https://wails.io/) — for cross-platform GUI
+- [Go](https://go.dev/) — backend and application core
+- [Wails](https://wails.io/) — desktop app framework (Go + frontend)
+- [Vue 3](https://vuejs.org/) + [TypeScript](https://www.typescriptlang.org/) — modern UI
 - [Docker](https://www.docker.com/) — environment engine
 - [YAML](https://yaml.org/) — config serialization
 
@@ -48,6 +49,10 @@ In the meantime:
 
 ```bash
 git clone https://github.com/yourusername/env-crafter.git
-cd env-crafter
+cd env-crafter/
+
+ go run .\migrations\migrate.go
+ 
+ cd gui
 # Follow Wails setup instructions
 wails dev

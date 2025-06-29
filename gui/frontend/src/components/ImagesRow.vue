@@ -121,7 +121,6 @@ const chunkedTags = computed(() => {
   border: 2px solid transparent;
   border-radius: 4px;
   padding: 5px;
-  transition: all 0.3s ease;
 }
 
 .image-list > button:hover {

@@ -1,8 +1,8 @@
 -- +goose Up
 INSERT INTO images(image, is_dockerfile, docker_image, image_type)
 VALUES
-    ('MongoDB', 0, 'mongo', 'sql'),
-    ('Redis', 0, 'redis', 'sql');
+    ('MongoDB', 0, 'mongo', 'nosql'),
+    ('Redis', 0, 'redis', 'nosql');
 
 INSERT INTO tags(image_id, tag_name)
 SELECT image_id, tag_name
