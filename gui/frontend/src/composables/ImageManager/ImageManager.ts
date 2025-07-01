@@ -1,6 +1,6 @@
 import {ImageTypes} from "../../types/ImageTypes";
 
-import { ref, computed, watch,  type ComputedRef, type Ref} from "vue";
+import { ref, computed, watch, type ComputedRef,type Ref} from "vue";
 import {ImageOption} from "../../types/ImageOption";
 import {TagOption} from "../../types/TagOption";
 import {ImageWithTag} from "../../types/ImageWithTag";
@@ -9,8 +9,8 @@ import {GetTagByImageId} from "../../../wailsjs/go/main/App";
 export interface ImageRowConfig {
     title: string;
     type: ImageTypes;
-    images: ComputedRef<ImageOption[]>;
-    tags: Ref<TagOption[]>;
+    images: ImageOption[];
+    tags: TagOption[];
     model: Ref<ImageWithTag>;
     updateHandler: (value: ImageWithTag) => void;
 }
@@ -39,8 +39,8 @@ export class ImageManager<T extends ImageTypes> {
         return {
             title: this.title,
             type: this.type,
-            images: this.images,
-            tags: this.tags,
+            images: this.images.value,
+            tags: this.tags.value,
             model: this.model,
             updateHandler: this.updateHandler,
         };
