@@ -1,15 +1,14 @@
 <template>
   <div class="tabs">
     <div class="tab-headers">
-      <button
+      <div
           v-for="(tab, index) in tabs"
           :key="tab.id"
           :class="{ active: activeTab === index }"
           @click="setActiveTab(index)"
-          :disabled="tab.disabled"
       >
         {{ tab.title }}
-      </button>
+      </div>
     </div>
     <div class="tab-content">
       <slot :name="tabs[activeTab].slot" />
