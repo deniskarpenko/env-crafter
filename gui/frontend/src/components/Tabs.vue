@@ -45,4 +45,15 @@ const setActiveTab = (index: number) => {
 
 const currentTab = computed(() => props.tabs[activeTab.value])
 </script>
-<style></style>
+<style lang="css">
+.tabs {
+  background-color: #706363;
+}
+.tab-headers {
+  display: flex;
+  gap: 10px;
+}
+.tab-content {
+  background-color: #706363;
+}
+</style>
