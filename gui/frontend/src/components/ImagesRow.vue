@@ -72,7 +72,6 @@ const onImageClick = (image: ImageOption): void => {
   }
 
   selectedImage.value = image;
-
   updateModel();
 }
 

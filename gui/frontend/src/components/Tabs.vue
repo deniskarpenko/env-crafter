@@ -50,7 +50,18 @@ const currentTab = computed(() => props.tabs[activeTab.value])
 }
 .tab-headers {
   display: flex;
-  gap: 10px;
+  gap: 2px;
+}
+
+.active {
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+  background-color: #a0c5ef;
+}
+
+.tab-headers > div {
+  border: 2px solid;
+  padding: 10px;
+  cursor: pointer;
 }
 .tab-content {
   background-color: #706363;

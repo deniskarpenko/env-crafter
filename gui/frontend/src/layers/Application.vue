@@ -7,8 +7,11 @@
           :title="config.title"
           :images="config.images"
           :tags="config.tags"
-          @update:model-value="config.updateHandler"
+          @update:model-value="handleImageRowUpdate(config, $event)"
       ></images-row>
+    </template>
+    <template #result>
+      <div>!!!!</div>
     </template>
   </Tabs>
     <div class="buttons-containers">
@@ -28,26 +31,30 @@ import {useImageManagers} from "../composables/ImageManager";
 
 const tabsConfig = [
   { id: 'images', title: 'Images', slot: 'images' },
+  { id: 'result', title: 'Result', slot: 'result' },
   { id: 'settings', title: 'Settings', slot: 'settings' },
 ]
 
 const appModel = reactive<Application>({
   name: "",
-  sql: "",
-  sqlTag: "",
-  nosql: "",
-  nosqlTag: "",
-  frontend: "",
-  frontendTag: "",
-  webserver: "",
-  webserverTag: "",
-  utility: "",
-  utilityTag: "",
+  backend: null,
+  sql: null,
+  nosql: null,
+  web: null,
 });
 
 const imagesOptions = ref<ImageOption[]>([]);
 
 const { configs: imageRowConfig } = useImageManagers(imagesOptions);
+
+const handleImageRowUpdate = (config: any, value: any) => {
+  console.log(value);
+
+  if (config.updateHandler) {
+    config.updateHandler(value);
+  }
+};
+
 
 onMounted(async () => {
   imagesOptions.value = await GetAllImages();

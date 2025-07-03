@@ -1,13 +1,10 @@
+import {ImageWithTag} from "./ImageWithTag";
+
 export interface Application {
     name: string;
-    sql: string;
-    sqlTag: string;
-    nosql: string;
-    nosqlTag: string;
-    frontend: string;
-    frontendTag: string;
-    webserver: string;
-    webserverTag: string;
-    utility: string;
-    utilityTag: string;
+    backend: ImageWithTag | null;
+    sql: ImageWithTag | null;
+    nosql: ImageWithTag | null;
+    web: ImageWithTag | null;
+
 }
