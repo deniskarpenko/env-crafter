@@ -3,7 +3,7 @@
 **Env Crafter** is a cross-platform desktop app that lets developers visually build and manage Docker-based development environments — without writing a single line of `docker-compose.yaml`.
 
 <p align="center">
-  <img src="https://your-screenshot-url" width="600" alt="Env Crafter UI Preview" />
+  <img src="https://github.com/deniskarpenko/env-crafter/blob/main/gui/frontend/public/images/icons/env-craft.png" width="600" alt="Env Crafter UI Preview" />
 </p>
 
 ---
