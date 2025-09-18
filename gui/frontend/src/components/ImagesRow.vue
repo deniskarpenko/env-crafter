@@ -1,6 +1,9 @@
 <template>
   <div class="image-row">
-    <h4 @click="imageCollapseHandler"> {{ title }} {{ arrow }} </h4>
+    <div class="image-row-header">
+      <h4 @click="imageCollapseHandler"> {{ title }} {{ arrow }} </h4>
+      <img src="/images/icons/gear.svg" @click="settingClickHandler(title)">
+    </div>
     <div class="image-list" :class="{ hidden: !isOpen }">
       <button
           v-for="image in images"
@@ -23,7 +26,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import {ImageOption} from "../types/ImageOption";
+import
+{ImageOption} from "../types/ImageOption";
 import {TagOption} from "../types/TagOption";
 import { ref, computed } from "vue";
 import {ImageWithTag} from "../types/ImageWithTag";
@@ -94,6 +98,10 @@ const chunkedTags = computed(() => {
 
   return chunks;
 });
+
+const settingClickHandler = (title: string): void => {
+  console.log(title);
+}
 
 </script>
 <style>
@@ -175,5 +183,13 @@ const chunkedTags = computed(() => {
   border-color: #007bff;
   background-color: #a0c5ef;
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+}
+.image-row-header {
+  display: flex;
+  cursor: pointer;
+}
+
+.image-row-header > img {
+  max-width: 20px;
 }
 </style>
