@@ -8,7 +8,9 @@
           :images="config.images"
           :tags="config.tags"
           @update:model-value="handleImageRowUpdate(config, $event)"
+          @click:settings="showSettings"
       ></images-row>
+      <settings-dialog></settings-dialog>
     </template>
     <template #result>
       <div>!!!!</div>
@@ -28,6 +30,7 @@ import {ImageOption} from "../types/ImageOption";
 import Tabs from "../components/Tabs.vue";
 import ImagesRow from "../components/ImagesRow.vue";
 import {useImageManagers} from "../composables/ImageManager";
+import SettingsDialog from "../components/dialog/SettingsDialog.vue";
 
 const tabsConfig = [
   { id: 'images', title: 'Images', slot: 'images' },
@@ -47,6 +50,8 @@ const imagesOptions = ref<ImageOption[]>([]);
 
 const { configs: imageRowConfig } = useImageManagers(imagesOptions);
 
+const isShowSettingsDialog = ref(false);
+
 const handleImageRowUpdate = (config: any, value: any) => {
   console.log(value);
 
@@ -55,11 +60,16 @@ const handleImageRowUpdate = (config: any, value: any) => {
   }
 };
 
+const showSettings = (title: string) => {
+  console.log("title", title);
+  isShowSettingsDialog.value = true;
+}
+
 
 onMounted(async () => {
   imagesOptions.value = await GetAllImages();
 
-})
+});
 </script>
 <style lang="css" scoped>
 .wrapper {

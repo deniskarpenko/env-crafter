@@ -42,6 +42,7 @@ const props = defineProps<Props>();
 
 const emit = defineEmits<{
   'update:modelValue': [value: ImageWithTag]
+  'click:settings': [title: string]
 }>();
 
 const isOpen = ref(true);
@@ -100,7 +101,7 @@ const chunkedTags = computed(() => {
 });
 
 const settingClickHandler = (title: string): void => {
-  console.log(title);
+  emit('click:settings', title);
 }
 
 </script>
