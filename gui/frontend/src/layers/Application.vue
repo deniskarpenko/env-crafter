@@ -10,7 +10,11 @@
           @update:model-value="handleImageRowUpdate(config, $event)"
           @click:settings="showSettings"
       ></images-row>
-      <settings-dialog></settings-dialog>
+      <settings-dialog
+          title="Settings"
+          :model-value="isShowSettingsDialog"
+          @close="isShowSettingsDialog = false"
+      ></settings-dialog>
     </template>
     <template #result>
       <div>!!!!</div>

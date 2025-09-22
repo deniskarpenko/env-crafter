@@ -3,29 +3,57 @@
     <form method="dialog" class="dialog-form">
       <header  class="dialog-header">
         <h2>{{ title }}</h2>
-        <button  @click="handleClose" class="close-button">x</button>/
+        <button  @click="handleClose" class="close-button">x</button>
       </header>
+      <main class="dialog-content">
+
+      </main>
     </form>
   </dialog>
 </template>
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {nextTick, ref, watch} from "vue";
 
 const props = withDefaults(defineProps<{
   title: string;
+  modelValue: boolean;
 }>(), {
   title: "",
+  modelValue: false,
 });
 const emit = defineEmits<{
   (event: 'close' | 'handleClose'): void;
 }>();
 
-const dialogRef = ref<null | HTMLElement>(null);
+const dialogRef = ref<null | HTMLDialogElement >(null);
+
+const openDialog = async () => {
+  await nextTick();
+  if (dialogRef.value && !dialogRef.value.open) {
+    dialogRef.value.showModal();
+  }
+}
+
+const closeDialog = async () => {
+  await nextTick();
+  if (dialogRef.value && !dialogRef.value.open) {
+    dialogRef.value.close();
+  }
+}
 
 const handleClose = () => {
   emit("close");
 }
+
+watch(() => props.modelValue, (newValue: boolean) => {
+  if (newValue) {
+    openDialog();
+    return;
+  }
+
+  closeDialog();
+});
 </script>
 <style scoped>
 .settings-dialog {
@@ -65,6 +93,12 @@ const handleClose = () => {
   color: #1f2937;
   font-size: 20px;
   font-weight: 600;
+}
+
+.dialog-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
 }
 
 
