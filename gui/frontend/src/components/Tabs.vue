@@ -46,7 +46,7 @@ const currentTab = computed(() => props.tabs[activeTab.value])
 </script>
 <style lang="css">
 .tabs {
-  background-color: #706363;
+  background-color: transparent;
 }
 .tab-headers {
   display: flex;
@@ -64,6 +64,6 @@ const currentTab = computed(() => props.tabs[activeTab.value])
   cursor: pointer;
 }
 .tab-content {
-  background-color: #706363;
+  background-color: transparent;
 }
 </style>

@@ -43,7 +43,7 @@ Spinning up dev environments with Docker should be fast and painless. Whether yo
 ## 📥 Getting Started
 
 > 🚧 **This project is under active development.**  
-> A public alpha release will be available in **August 2025**.
+> A public alpha release will be available in **December 2025**.
 
 In the meantime:
 
