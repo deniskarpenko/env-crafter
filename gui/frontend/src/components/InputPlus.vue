@@ -3,15 +3,27 @@
 <input
     v-model="input.value"
     type="text"
-    class="input-field"
+    :class="['input-field', { 'input-error': !input.isValid && input.value !== '' }]"
+    @blur="updateInputValue(index)"
 />
-  <button v-if="index > 0" type="button">x</button>
+  <button v-if="index > 0" type="button" @click="removeInput(index)">x</button>
+  <div v-if="!input.isValid && input.value !== ''" class="error-message">
+    {{ input.errorMessage }}
+  </div>
 </div>
-  <button @click="addInput" type="button">+</button>
+  <button type="button" @click="addInput" >+</button>
 </template>
 <script setup lang="ts">
-
 import {ref} from "vue";
+
+const props = defineProps<{
+  errorMessage: string;
+  validateInput: (value: string) => boolean;
+}>();
+
+const emit = defineEmits<{
+  (event: 'updateInputs', values: string[]): void;
+}>();
 
 interface InputItem {
   id: number;
@@ -27,10 +39,33 @@ const inputs = ref<InputItem[]>([
 const nextId = ref(1);
 
 const addInput = () => {
-  console.log("addInput");
   inputs.value.push({id: nextId.value, value:'', isValid: true, errorMessage: ''});
   nextId.value++;
 };
+
+const removeInput = (index: number): void => {
+  inputs.value.splice(index, 1);
+}
+
+const updateInputValue = (index: number): void => {
+  const input = inputs.value[index];
+
+  if (input === undefined) {
+    return;
+  }
+
+  input.isValid = props.validateInput(input.value);
+  input.errorMessage = props.errorMessage;
+
+  if (!input.isValid) {
+    return;
+  }
+
+  emit('updateInputs', inputs.value
+      .filter(input => input.value.trim() !== '')
+      .map((input: InputItem) => input.value)
+  );
+}
 
 </script>
 <style scoped>
@@ -51,5 +86,16 @@ const addInput = () => {
 .input-field:focus {
   outline: none;
   border-color: #007bff;
+}
+
+.input-field.input-error {
+  border-color: #dc3545;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 8px;
 }
 </style>

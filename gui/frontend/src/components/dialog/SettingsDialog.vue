@@ -9,7 +9,12 @@
         <tabs :tabs="tabsConfig">
           <template #ports>
             <div><span>Ports</span></div>
-            <input-plus></input-plus>
+            <div>Format should be 'number:number'(e.g., 123:456)</div>
+            <input-plus
+                error-message="Format should be 'number:number'(e.g., 123:456)"
+                :validate-input="validatePortInput"
+                @update-inputs="handleUpdatePorts"
+            ></input-plus>
           </template>
           <template #volumes>???</template>
         </tabs>
@@ -47,17 +52,27 @@ const openDialog = async () => {
   if (dialogRef.value && !dialogRef.value.open) {
     dialogRef.value.showModal();
   }
-}
+};
 
 const closeDialog = async () => {
   await nextTick();
   if (dialogRef.value && !dialogRef.value.open) {
     dialogRef.value.close();
   }
-}
+};
 
 const handleClose = () => {
   emit("close");
+};
+
+const validatePortInput = (value: string) => {
+  const regex = /^\d+:\d+$/;
+
+  return regex.test(value);
+};
+
+const handleUpdatePorts = (ports: string[]) => {
+  console.log(ports);
 }
 
 watch(() => props.modelValue, (newValue: boolean) => {
