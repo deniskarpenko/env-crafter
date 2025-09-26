@@ -1,11 +1,21 @@
 <template>
 <div v-for="(input, index) in inputs" :key="input.id" class="inputs-wrapper">
-<input
+  <input
+      v-if="type !== 'file'"
     v-model="input.value"
-    type="text"
+    :type="type"
     :class="['input-field', { 'input-error': !input.isValid && input.value !== '' }]"
     @blur="updateInputValue(index)"
 />
+  <input
+      v-else
+      v-model="input.value"
+      :type="type"
+      :class="['input-field', { 'input-error': !input.isValid && input.value !== '' }]"
+      @blur="updateInputValue(index)"
+      accept=".env"
+      multiple
+  />
   <button v-if="index > 0" type="button" @click="removeInput(index)">x</button>
   <div v-if="!input.isValid && input.value !== ''" class="error-message">
     {{ input.errorMessage }}
@@ -15,22 +25,17 @@
 </template>
 <script setup lang="ts">
 import {ref} from "vue";
+import {InputItem, InputType} from "../types/InputItem";
 
 const props = defineProps<{
-  errorMessage: string;
-  validateInput: (value: string) => boolean;
+  type: InputType;
+  errorMessage?: string;
+  validateInput?: (value: string) => boolean;
 }>();
 
 const emit = defineEmits<{
   (event: 'updateInputs', values: string[]): void;
 }>();
-
-interface InputItem {
-  id: number;
-  value: string;
-  isValid: boolean;
-  errorMessage: string;
-}
 
 const inputs = ref<InputItem[]>([
   {id: 0, value:'', isValid: true, errorMessage: ''}
@@ -50,7 +55,11 @@ const removeInput = (index: number): void => {
 const updateInputValue = (index: number): void => {
   const input = inputs.value[index];
 
-  if (input === undefined) {
+  if (
+      input === undefined ||
+      props.validateInput === undefined ||
+      props.errorMessage === undefined
+  ) {
     return;
   }
 

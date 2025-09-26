@@ -9,14 +9,39 @@
         <tabs :tabs="tabsConfig">
           <template #ports>
             <div><span>Ports</span></div>
-            <div>Format should be 'number:number'(e.g., 123:456)</div>
+            <div>Format: 'outside:inside' (e.g., 8080:80 means "access port 8080 on your computer to reach port 80 in container")</div>
             <input-plus
+                type="text"
                 error-message="Format should be 'number:number'(e.g., 123:456)"
-                :validate-input="validatePortInput"
+                :validate-input="(value: string) => validate(value, 'ports')"
                 @update-inputs="handleUpdatePorts"
             ></input-plus>
           </template>
-          <template #volumes>???</template>
+          <template #volumes>
+            <div><span>Volumes</span></div>
+            <div>Format: 'outside:inside' (e.g., ./data:/app/data - your ./data folder ↔ container's /app/data folder)</div>
+            <input-plus
+                type="text"
+                error-message="Format should be 'string:string'(e.g., ./data:/app/data)"
+                :validate-input="(value: string) => validate(value, 'volumes')"
+                @update-inputs="handleUpdateVolumes"
+            />
+          </template>
+          <template #envs>
+            <div><span>Env files</span></div>
+            <input-plus
+                type="file"
+                @update-inputs="handleUpdateEnvFiles"
+            />
+            <div><span>Env variables</span></div>
+            <div>Format: 'variable=value'</div>
+            <input-plus
+                type="text"
+                error-message="Format should be 'string=string'(e.g., NODE_ENV=production)"
+                :validate-input="(value: string) => validate(value, 'envs')"
+                @update-inputs="handleUpdateEnvs"
+            />
+          </template>
         </tabs>
       </main>
     </form>
@@ -42,7 +67,7 @@ const emit = defineEmits<{
 const tabsConfig = [
   { id: 'ports', title: 'Ports', slot: 'ports' },
   { id: "volumes", title: 'Volumes', slot: 'volumes' },
-  { id: 'envs', title: 'Result', slot: 'result' },
+  { id: 'envs', title: 'Envs', slot: 'envs' },
 ]
 
 const dialogRef = ref<null | HTMLDialogElement >(null);
@@ -65,15 +90,33 @@ const handleClose = () => {
   emit("close");
 };
 
-const validatePortInput = (value: string) => {
-  const regex = /^\d+:\d+$/;
 
-  return regex.test(value);
+const validationRules = {
+  ports: /^\d+:\d+$/,
+  volumes: /^[^:]+?:(.+?)$/,
+  envs: /^[^:]+?=(.+?)$/
+} as const;
+
+const validate = (value: string, rule: keyof typeof validationRules) => {
+  return validationRules[rule].test(value);
 };
 
 const handleUpdatePorts = (ports: string[]) => {
   console.log(ports);
 }
+
+const handleUpdateVolumes = (volumes: string[]) => {
+  console.log(volumes);
+};
+
+const handleUpdateEnvFiles = (envFiles: string[]) => {
+  console.log(envFiles);
+}
+
+const handleUpdateEnvs = (envs: string[]) => {
+  console.log(envs);
+}
+
 
 watch(() => props.modelValue, (newValue: boolean) => {
   if (newValue) {
