@@ -2,7 +2,7 @@
   <div class="image-row">
     <div class="image-row-header">
       <h4 @click="imageCollapseHandler"> {{ title }} {{ arrow }} </h4>
-      <img src="/images/icons/gear.svg" @click="settingClickHandler(title)">
+      <img src="/images/icons/gear.svg" @click="settingClickHandler(type)">
     </div>
     <div class="image-list" :class="{ hidden: !isOpen }">
       <button
@@ -26,23 +26,24 @@
   </div>
 </template>
 <script setup lang="ts">
-import
-{ImageOption} from "../types/ImageOption";
+import {ImageOption} from "../types/ImageOption";
 import {TagOption} from "../types/TagOption";
 import { ref, computed } from "vue";
 import {ImageWithTag} from "../types/ImageWithTag";
+import {ImageTypes} from "../types/ImageTypes";
 
 interface Props {
   images: ImageOption[];
   tags: TagOption[];
   title: string;
   modelValue?: ImageWithTag
+  type: ImageTypes
 }
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
   'update:modelValue': [value: ImageWithTag]
-  'click:settings': [title: string]
+  'click:settings': [type: ImageTypes]
 }>();
 
 const isOpen = ref(true);
@@ -100,8 +101,8 @@ const chunkedTags = computed(() => {
   return chunks;
 });
 
-const settingClickHandler = (title: string): void => {
-  emit('click:settings', title);
+const settingClickHandler = (type: ImageTypes): void => {
+  emit('click:settings', type);
 }
 
 </script>

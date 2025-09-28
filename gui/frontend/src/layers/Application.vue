@@ -8,6 +8,7 @@
             :title="config.title"
             :images="config.images"
             :tags="config.tags"
+            :type="config.type"
             @update:model-value="handleImageRowUpdate(config, $event)"
             @click:settings="showSettings"
         ></images-row>
@@ -90,6 +91,9 @@ const showSettings = (title: string) => {
 
 const handleClose = (config: ContainerConfig) => {
   isShowSettingsDialog.value = false;
+  console.log(selectedRow.value);
+  console.log(config);
+  console.log(appModel);
 };
 
 onMounted(async () => {
