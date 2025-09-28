@@ -101,17 +101,13 @@ const closeDialog = async () => {
   }
 };
 
-// Обработчик для ручного закрытия (кнопка X)
 const handleManualClose = async () => {
-  console.log("MANUAL CLOSE");
   await closeDialog();
   emit("close", containerConfig.value);
 };
 
-// Обработчик для автоматического закрытия диалога (ESC, клик вне диалога)
 const handleDialogClose = () => {
   if (!isClosing.value) {
-    console.log("DIALOG AUTO CLOSE");
     emit("close", containerConfig.value);
   }
 };
