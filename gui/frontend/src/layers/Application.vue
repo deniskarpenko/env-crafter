@@ -2,21 +2,22 @@
   <div class="wrapper">
     <Tabs :tabs="tabsConfig">
       <template #images>
-        <images-row
-            v-for="config in imageRowConfig"
-            :key="config.title"
-            :title="config.title"
-            :images="config.images"
-            :tags="config.tags"
-            :type="config.type"
-            @update:model-value="handleImageRowUpdate(config, $event)"
-            @click:settings="showSettings"
-        ></images-row>
-        <settings-dialog
-            title="Settings"
-            :model-value="isShowSettingsDialog"
-            @close="handleClose"
-        ></settings-dialog>
+        <div  v-for="config in imageRowConfig">
+          <images-row
+              :key="config.title"
+              :title="config.title"
+              :images="config.images"
+              :tags="config.tags"
+              :type="config.type"
+              @update:model-value="handleImageRowUpdate(config, $event)"
+              @click:settings="showSettings"
+          ></images-row>
+          <settings-dialog
+              title="Settings"
+              :model-value="isShowSettingsDialog"
+              @close="handleClose"
+          ></settings-dialog>
+        </div>
       </template>
       <template #result>
         <div>!!!!</div>
@@ -29,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref, onMounted} from "vue";
+import {reactive, ref, onMounted, nextTick} from "vue";
 import {GetAllImages} from "../../wailsjs/go/main/App";
 import {Application, ContainerConfig, ImageWithTagConfig} from "../types/Application";
 import {ImageOption} from "../types/ImageOption";
@@ -38,6 +39,7 @@ import ImagesRow from "../components/ImagesRow.vue";
 import {useImageManagers} from "../composables/ImageManager";
 import SettingsDialog from "../components/dialog/SettingsDialog.vue";
 import {ImageWithTag} from "../types/ImageWithTag";
+import {ImageTypes} from "../types/ImageTypes";
 
 const tabsConfig = [
   { id: 'images', title: 'Images', slot: 'images' },
@@ -54,7 +56,7 @@ const appModel = reactive<Application>({
 
 const imagesOptions = ref<ImageOption[]>([]);
 const isShowSettingsDialog = ref(false);
-const selectedRow = ref<string>('');
+const selectedRow = ref<ImageTypes | null>(null);
 
 const { configs: imageRowConfig } = useImageManagers(imagesOptions);
 
@@ -84,16 +86,30 @@ const handleImageRowUpdate = (config: any, value: ImageWithTag) => {
   }
 };
 
-const showSettings = (title: string) => {
-  selectedRow.value = title;
+const showSettings = (type: ImageTypes) => {
+  selectedRow.value = type;
   isShowSettingsDialog.value = true;
 };
 
-const handleClose = (config: ContainerConfig) => {
+const handleClose = async (config: ContainerConfig) => {
+  await nextTick();
+
+  console.log("APP CLOSE");
+
+  if (selectedRow.value === null || !(selectedRow.value in appModel)) {
+    isShowSettingsDialog.value = false;
+    return;
+  }
+
+  const propertyName = selectedRow.value as keyof Application;
+
+  if (appModel[propertyName] === null) {
+    isShowSettingsDialog.value = false;
+    return;
+  }
+
+  appModel[propertyName]!.config = config;
   isShowSettingsDialog.value = false;
-  console.log(selectedRow.value);
-  console.log(config);
-  console.log(appModel);
 };
 
 onMounted(async () => {

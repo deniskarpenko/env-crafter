@@ -1,9 +1,9 @@
 <template>
-  <dialog ref="dialogRef" class="settings-dialog" @close="handleClose">
+  <dialog ref="dialogRef" class="settings-dialog" @close="handleDialogClose">
     <form method="dialog" class="dialog-form">
-      <header  class="dialog-header">
+      <header class="dialog-header">
         <h2>{{ title }}</h2>
-        <button  @click="handleClose" class="close-button">x</button>
+        <button type="button" @click="handleManualClose" class="close-button">x</button>
       </header>
       <main class="dialog-content">
         <tabs :tabs="tabsConfig">
@@ -47,8 +47,8 @@
     </form>
   </dialog>
 </template>
-<script setup lang="ts">
 
+<script setup lang="ts">
 import {nextTick, ref, watch} from "vue";
 import Tabs from "../Tabs.vue";
 import InputPlus from "../InputPlus.vue";
@@ -57,7 +57,7 @@ import {ContainerConfig} from "../../types/Application";
 const props = withDefaults(defineProps<{
   title: string;
   modelValue: boolean;
-  config: ContainerConfig;
+  config?: ContainerConfig;
 }>(), {
   title: "",
   modelValue: false,
@@ -68,36 +68,53 @@ const props = withDefaults(defineProps<{
     envs: [],
   })
 });
+
 const emit = defineEmits<{
-  (event: 'close' | 'handleClose', config: ContainerConfig): void;
+  (event: 'close', config: ContainerConfig): void;
 }>();
 
 const tabsConfig = [
   { id: 'ports', title: 'Ports', slot: 'ports' },
   { id: "volumes", title: 'Volumes', slot: 'volumes' },
   { id: 'envs', title: 'Envs', slot: 'envs' },
-]
+];
 
-const dialogRef = ref<null | HTMLDialogElement >(null);
+const dialogRef = ref<null | HTMLDialogElement>(null);
+const isClosing = ref(false);
 
 const openDialog = async () => {
   await nextTick();
   if (dialogRef.value && !dialogRef.value.open) {
+    isClosing.value = false;
     dialogRef.value.showModal();
   }
 };
 
 const closeDialog = async () => {
+  if (isClosing.value) return;
+
+  isClosing.value = true;
+
   await nextTick();
-  if (dialogRef.value && !dialogRef.value.open) {
+  if (dialogRef.value && dialogRef.value.open) {
     dialogRef.value.close();
   }
 };
 
-const handleClose = () => {
+// Обработчик для ручного закрытия (кнопка X)
+const handleManualClose = async () => {
+  console.log("MANUAL CLOSE");
+  await closeDialog();
   emit("close", containerConfig.value);
 };
 
+// Обработчик для автоматического закрытия диалога (ESC, клик вне диалога)
+const handleDialogClose = () => {
+  if (!isClosing.value) {
+    console.log("DIALOG AUTO CLOSE");
+    emit("close", containerConfig.value);
+  }
+};
 
 const containerConfig = ref<ContainerConfig>({
   ports: [],
@@ -118,7 +135,7 @@ const validate = (value: string, rule: keyof typeof validationRules) => {
 
 const handleUpdatePorts = (ports: string[]) => {
   containerConfig.value.ports = ports;
-}
+};
 
 const handleUpdateVolumes = (volumes: string[]) => {
   containerConfig.value.volumes = volumes;
@@ -126,12 +143,11 @@ const handleUpdateVolumes = (volumes: string[]) => {
 
 const handleUpdateEnvFiles = (envFiles: string[]) => {
   containerConfig.value.envFiles = envFiles;
-}
+};
 
 const handleUpdateEnvs = (envs: string[]) => {
   containerConfig.value.envs = envs;
-}
-
+};
 
 watch(() => props.modelValue, (newValue: boolean) => {
   if (newValue) {
@@ -141,7 +157,15 @@ watch(() => props.modelValue, (newValue: boolean) => {
 
   closeDialog();
 });
+
+// Инициализация конфигурации при изменении props
+watch(() => props.config, (newConfig) => {
+  if (newConfig) {
+    containerConfig.value = { ...newConfig };
+  }
+}, { immediate: true, deep: true });
 </script>
+
 <style scoped>
 .settings-dialog {
   border-radius: 12px;
@@ -156,7 +180,7 @@ watch(() => props.modelValue, (newValue: boolean) => {
 }
 
 .settings-dialog::backdrop {
-  background: #656262;;
+  background: #656262;
   backdrop-filter: blur(4px);
 }
 
@@ -187,5 +211,16 @@ watch(() => props.modelValue, (newValue: boolean) => {
   overflow-y: auto;
 }
 
+.close-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #666;
+  padding: 4px;
+}
 
+.close-button:hover {
+  color: #333;
+}
 </style>
