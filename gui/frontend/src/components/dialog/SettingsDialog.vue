@@ -52,6 +52,7 @@
 import {nextTick, ref, watch} from "vue";
 import Tabs from "../Tabs.vue";
 import InputPlus from "../InputPlus.vue";
+import {ContainerConfig} from "../../types/Application";
 
 const props = withDefaults(defineProps<{
   title: string;
@@ -61,7 +62,7 @@ const props = withDefaults(defineProps<{
   modelValue: false,
 });
 const emit = defineEmits<{
-  (event: 'close' | 'handleClose'): void;
+  (event: 'close' | 'handleClose', config: ContainerConfig): void;
 }>();
 
 const tabsConfig = [
@@ -87,9 +88,16 @@ const closeDialog = async () => {
 };
 
 const handleClose = () => {
-  emit("close");
+  emit("close", containerConfig.value);
 };
 
+
+const containerConfig = ref<ContainerConfig>({
+  ports: [],
+  volumes: [],
+  envFiles: [],
+  envs: []
+});
 
 const validationRules = {
   ports: /^\d+:\d+$/,
@@ -102,19 +110,19 @@ const validate = (value: string, rule: keyof typeof validationRules) => {
 };
 
 const handleUpdatePorts = (ports: string[]) => {
-  console.log(ports);
+  containerConfig.value.ports = ports;
 }
 
 const handleUpdateVolumes = (volumes: string[]) => {
-  console.log(volumes);
+  containerConfig.value.volumes = volumes;
 };
 
 const handleUpdateEnvFiles = (envFiles: string[]) => {
-  console.log(envFiles);
+  containerConfig.value.envFiles = envFiles;
 }
 
 const handleUpdateEnvs = (envs: string[]) => {
-  console.log(envs);
+  containerConfig.value.envs = envs;
 }
 
 
