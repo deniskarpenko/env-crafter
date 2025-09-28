@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref, onMounted} from "vue";
+import {reactive, ref, onMounted, nextTick} from "vue";
 import {GetAllImages} from "../../wailsjs/go/main/App";
 import {Application, ContainerConfig, ImageWithTagConfig} from "../types/Application";
 import {ImageOption} from "../types/ImageOption";
@@ -91,19 +91,24 @@ const showSettings = (type: ImageTypes) => {
   isShowSettingsDialog.value = true;
 };
 
-const handleClose = (config: ContainerConfig) => {
+const handleClose = async (config: ContainerConfig) => {
+  await nextTick();
+
   if (selectedRow.value === null || !(selectedRow.value in appModel)) {
+    isShowSettingsDialog.value = false;
     return;
   }
 
   const propertyName = selectedRow.value as keyof Application;
 
   if (appModel[propertyName] === null) {
+    isShowSettingsDialog.value = false;
     return;
   }
 
-  appModel[propertyName]!.config = config
+  appModel[propertyName]!.config = config;
   isShowSettingsDialog.value = false;
+  selectedRow.value = null
 };
 
 onMounted(async () => {

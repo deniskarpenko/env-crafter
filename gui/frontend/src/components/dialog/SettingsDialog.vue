@@ -57,16 +57,11 @@ import {ContainerConfig} from "../../types/Application";
 const props = withDefaults(defineProps<{
   title: string;
   modelValue: boolean;
-  config?: ContainerConfig;
+  containerConfig?: ContainerConfig | null;
 }>(), {
   title: "",
   modelValue: false,
-  config: () => ({
-    ports: [],
-    volumes: [],
-    envFiles: [],
-    envs: [],
-  })
+  containerConfig: null,
 });
 
 const emit = defineEmits<{
@@ -155,7 +150,7 @@ watch(() => props.modelValue, (newValue: boolean) => {
 });
 
 // Инициализация конфигурации при изменении props
-watch(() => props.config, (newConfig) => {
+watch(() => props.containerConfig, (newConfig) => {
   if (newConfig) {
     containerConfig.value = { ...newConfig };
   }
