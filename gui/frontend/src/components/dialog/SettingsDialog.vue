@@ -57,9 +57,16 @@ import {ContainerConfig} from "../../types/Application";
 const props = withDefaults(defineProps<{
   title: string;
   modelValue: boolean;
+  config: ContainerConfig;
 }>(), {
   title: "",
   modelValue: false,
+  config: () => ({
+    ports: [],
+    volumes: [],
+    envFiles: [],
+    envs: [],
+  })
 });
 const emit = defineEmits<{
   (event: 'close' | 'handleClose', config: ContainerConfig): void;
