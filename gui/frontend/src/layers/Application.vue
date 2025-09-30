@@ -15,6 +15,7 @@
           <settings-dialog
               title="Settings"
               :model-value="isShowSettingsDialog"
+              :container-config="getContainerConfigFromModel(config.type)"
               @close="handleClose"
           ></settings-dialog>
         </div>
@@ -110,6 +111,20 @@ const handleClose = async (config: ContainerConfig) => {
   isShowSettingsDialog.value = false;
   selectedRow.value = null
 };
+
+const getContainerConfigFromModel = (imageType: ImageTypes): ContainerConfig | null => {
+  if (!(imageType in appModel)) {
+    return null;
+  }
+
+  const propertyName = imageType as keyof Application;
+
+  if (appModel[propertyName] === null) {
+    return null;
+  }
+
+  return appModel[propertyName]!.config;
+}
 
 onMounted(async () => {
   imagesOptions.value = await GetAllImages();

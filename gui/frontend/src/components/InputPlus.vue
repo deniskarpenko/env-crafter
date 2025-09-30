@@ -1,5 +1,5 @@
 <template>
-<div v-for="(input, index) in inputs" :key="input.id" class="inputs-wrapper">
+<div v-for="(input, index) in localInputs" :key="input.id" class="inputs-wrapper">
   <input
       v-if="type !== 'file'"
     v-model="input.value"
@@ -27,33 +27,41 @@
 import {ref} from "vue";
 import {InputItem, InputType} from "../types/InputItem";
 
-const props = defineProps<{
+interface Props {
   type: InputType;
   errorMessage?: string;
   validateInput?: (value: string) => boolean;
-}>();
+  inputs?: InputItem[];
+}
+
+const props = withDefaults(defineProps<Props>(),{
+  inputs: () => [
+    {id: 0, value: '', isValid: true, errorMessage: ''}
+  ]
+});
 
 const emit = defineEmits<{
   (event: 'updateInputs', values: string[]): void;
 }>();
 
-const inputs = ref<InputItem[]>([
-  {id: 0, value:'', isValid: true, errorMessage: ''}
-]);
 
-const nextId = ref(1);
+const localInputs = ref<InputItem[]>([...props.inputs]);
+
+const nextId = ref(
+    Math.max(...localInputs.value.map(item => item.id), 0) + 1
+);
 
 const addInput = () => {
-  inputs.value.push({id: nextId.value, value:'', isValid: true, errorMessage: ''});
+  localInputs.value.push({id: nextId.value, value:'', isValid: true, errorMessage: ''});
   nextId.value++;
 };
 
 const removeInput = (index: number): void => {
-  inputs.value.splice(index, 1);
+  localInputs.value.splice(index, 1);
 }
 
 const updateInputValue = (index: number): void => {
-  const input = inputs.value[index];
+  const input = localInputs.value[index];
 
   if (
       input === undefined ||
@@ -70,7 +78,7 @@ const updateInputValue = (index: number): void => {
     return;
   }
 
-  emit('updateInputs', inputs.value
+  emit('updateInputs', localInputs.value
       .filter(input => input.value.trim() !== '')
       .map((input: InputItem) => input.value)
   );

@@ -10,6 +10,8 @@ VALUES
 INSERT INTO tags(image_id, tag_name)
       SELECT image_id, tag_name FROM images
       JOIN (
+          SELECT "PHP" AS image, "8.4-fpm" as tag_name
+          UNION ALL
           SELECT "PHP" AS image, "8.3-fpm" as tag_name
           UNION ALL
           SELECT "PHP" AS image, "8.3-apache"
@@ -21,8 +23,6 @@ INSERT INTO tags(image_id, tag_name)
           SELECT "PHP" AS image, "8.2-fpm"
           UNION ALL
           SELECT "PHP" AS image, "8.2-apache"
-          UNION ALL
-          SELECT "PHP" AS image, "8.1-fpm"
           UNION ALL
           SELECT "PHP" AS image, "7.4-fpm"
           UNION ALL
