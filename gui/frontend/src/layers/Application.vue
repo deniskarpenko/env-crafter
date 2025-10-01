@@ -102,11 +102,14 @@ const handleClose = async (config: ContainerConfig) => {
   const propertyName = selectedRow.value as keyof Application;
 
   if (appModel[propertyName] === null) {
-    isShowSettingsDialog.value = false;
-    return;
+    appModel[propertyName] = {
+      image: null,
+      config: config
+    };
+  } else {
+    appModel[propertyName]!.config = config;
   }
 
-  appModel[propertyName]!.config = config;
   isShowSettingsDialog.value = false;
   selectedRow.value = null
 };

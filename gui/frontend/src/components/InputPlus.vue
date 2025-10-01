@@ -5,14 +5,14 @@
     v-model="input.value"
     :type="type"
     :class="['input-field', { 'input-error': !input.isValid && input.value !== '' }]"
-    @blur="updateInputValue(index)"
+    @input="updateInputValue(index)"
 />
   <input
       v-else
       v-model="input.value"
       :type="type"
       :class="['input-field', { 'input-error': !input.isValid && input.value !== '' }]"
-      @blur="updateInputValue(index)"
+      @input="updateInputValue(index)"
       accept=".env"
       multiple
   />
@@ -24,7 +24,7 @@
   <button type="button" @click="addInput" >+</button>
 </template>
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {InputItem, InputType} from "../types/InputItem";
 
 interface Props {

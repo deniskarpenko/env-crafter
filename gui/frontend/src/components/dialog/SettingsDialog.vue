@@ -25,6 +25,7 @@
                 type="text"
                 error-message="Format should be 'string:string'(e.g., ./data:/app/data)"
                 :validate-input="(value: string) => validate(value, 'volumes')"
+                :inputs="containerConfig?.volumes"
                 @update-inputs="handleUpdateVolumes"
             />
           </template>
@@ -32,6 +33,7 @@
             <div><span>Env files</span></div>
             <input-plus
                 type="file"
+                :inputs="containerConfig.envFiles"
                 @update-inputs="handleUpdateEnvFiles"
             />
             <div><span>Env variables</span></div>
@@ -39,6 +41,7 @@
             <input-plus
                 type="text"
                 error-message="Format should be 'string=string'(e.g., NODE_ENV=production)"
+                :inputs="containerConfig.envs"
                 :validate-input="(value: string) => validate(value, 'envs')"
                 @update-inputs="handleUpdateEnvs"
             />

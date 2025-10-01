@@ -10,7 +10,7 @@ export interface ContainerConfig {
 }
 
 export interface ImageWithTagConfig {
-    image: ImageWithTag;
+    image: ImageWithTag | null;
     config: ContainerConfig;
 
 }
