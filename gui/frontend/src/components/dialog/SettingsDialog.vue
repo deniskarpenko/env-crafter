@@ -14,6 +14,7 @@
                 type="text"
                 error-message="Format should be 'number:number'(e.g., 123:456)"
                 :validate-input="(value: string) => validate(value, 'ports')"
+                :inputs="containerConfig?.ports"
                 @update-inputs="handleUpdatePorts"
             ></input-plus>
           </template>
@@ -99,6 +100,7 @@ const closeDialog = async () => {
 const handleManualClose = async () => {
   await closeDialog();
   emit("close", containerConfig.value);
+  resetContainerConfig();
 };
 
 const handleDialogClose = () => {
@@ -140,6 +142,15 @@ const handleUpdateEnvs = (envs: string[]) => {
   containerConfig.value.envs = envs;
 };
 
+const resetContainerConfig = () => {
+  containerConfig.value = {
+    ports: [],
+    volumes: [],
+    envFiles: [],
+    envs: []
+  }
+}
+
 watch(() => props.modelValue, (newValue: boolean) => {
   if (newValue) {
     openDialog();
@@ -149,7 +160,6 @@ watch(() => props.modelValue, (newValue: boolean) => {
   closeDialog();
 });
 
-// Инициализация конфигурации при изменении props
 watch(() => props.containerConfig, (newConfig) => {
   if (newConfig) {
     containerConfig.value = { ...newConfig };

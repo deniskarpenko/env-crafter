@@ -45,7 +45,6 @@ import {ImageTypes} from "../types/ImageTypes";
 const tabsConfig = [
   { id: 'images', title: 'Images', slot: 'images' },
   { id: 'result', title: 'Result', slot: 'result' },
-  { id: 'settings', title: 'Settings', slot: 'settings' },
 ];
 
 const appModel = reactive<Application>({

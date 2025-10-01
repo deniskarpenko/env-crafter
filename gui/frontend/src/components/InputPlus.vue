@@ -24,28 +24,25 @@
   <button type="button" @click="addInput" >+</button>
 </template>
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {InputItem, InputType} from "../types/InputItem";
 
 interface Props {
   type: InputType;
   errorMessage?: string;
   validateInput?: (value: string) => boolean;
-  inputs?: InputItem[];
+  inputs?: string[];
 }
 
 const props = withDefaults(defineProps<Props>(),{
-  inputs: () => [
-    {id: 0, value: '', isValid: true, errorMessage: ''}
-  ]
+  inputs: () => []
 });
 
 const emit = defineEmits<{
   (event: 'updateInputs', values: string[]): void;
 }>();
 
-
-const localInputs = ref<InputItem[]>([...props.inputs]);
+const localInputs = ref<InputItem[]>([]);
 
 const nextId = ref(
     Math.max(...localInputs.value.map(item => item.id), 0) + 1
@@ -83,6 +80,18 @@ const updateInputValue = (index: number): void => {
       .map((input: InputItem) => input.value)
   );
 }
+
+onMounted(() => {
+  if (props.inputs.length === 0) {
+    localInputs.value.push({id: nextId.value, value: '', isValid: false, errorMessage: props.errorMessage});
+    return;
+  }
+
+  props.inputs.forEach(input => {
+    const isValid = props.validateInput !== undefined ? props.validateInput(input) : true;
+    localInputs.value.push({id: nextId.value, value: input, isValid: isValid, errorMessage: props.errorMessage});
+  });
+})
 
 </script>
 <style scoped>
