@@ -14,7 +14,7 @@
                 type="text"
                 error-message="Format should be 'number:number'(e.g., 123:456)"
                 :validate-input="(value: string) => validate(value, 'ports')"
-                :inputs="containerConfig?.ports"
+                :inputs="localContainerConfig?.ports"
                 @update-inputs="handleUpdatePorts"
             ></input-plus>
           </template>
@@ -25,7 +25,7 @@
                 type="text"
                 error-message="Format should be 'string:string'(e.g., ./data:/app/data)"
                 :validate-input="(value: string) => validate(value, 'volumes')"
-                :inputs="containerConfig?.volumes"
+                :inputs="localContainerConfig?.volumes"
                 @update-inputs="handleUpdateVolumes"
             />
           </template>
@@ -33,7 +33,7 @@
             <div><span>Env files</span></div>
             <input-plus
                 type="file"
-                :inputs="containerConfig.envFiles"
+                :inputs="localContainerConfig.envFiles"
                 @update-inputs="handleUpdateEnvFiles"
             />
             <div><span>Env variables</span></div>
@@ -41,7 +41,7 @@
             <input-plus
                 type="text"
                 error-message="Format should be 'string=string'(e.g., NODE_ENV=production)"
-                :inputs="containerConfig.envs"
+                :inputs="localContainerConfig.envs"
                 :validate-input="(value: string) => validate(value, 'envs')"
                 @update-inputs="handleUpdateEnvs"
             />
@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import {nextTick, ref, watch} from "vue";
+import {nextTick, onMounted, ref, watch} from "vue";
 import Tabs from "../Tabs.vue";
 import InputPlus from "../InputPlus.vue";
 import {ContainerConfig} from "../../types/Application";
@@ -102,17 +102,16 @@ const closeDialog = async () => {
 
 const handleManualClose = async () => {
   await closeDialog();
-  emit("close", containerConfig.value);
-  resetContainerConfig();
+  emit("close", localContainerConfig.value);
 };
 
 const handleDialogClose = () => {
   if (!isClosing.value) {
-    emit("close", containerConfig.value);
+    emit("close", localContainerConfig.value);
   }
 };
 
-const containerConfig = ref<ContainerConfig>({
+const localContainerConfig = ref<ContainerConfig>({
   ports: [],
   volumes: [],
   envFiles: [],
@@ -130,29 +129,20 @@ const validate = (value: string, rule: keyof typeof validationRules) => {
 };
 
 const handleUpdatePorts = (ports: string[]) => {
-  containerConfig.value.ports = ports;
+  localContainerConfig.value.ports = ports;
 };
 
 const handleUpdateVolumes = (volumes: string[]) => {
-  containerConfig.value.volumes = volumes;
+  localContainerConfig.value.volumes = volumes;
 };
 
 const handleUpdateEnvFiles = (envFiles: string[]) => {
-  containerConfig.value.envFiles = envFiles;
+  localContainerConfig.value.envFiles = envFiles;
 };
 
 const handleUpdateEnvs = (envs: string[]) => {
-  containerConfig.value.envs = envs;
+  localContainerConfig.value.envs = envs;
 };
-
-const resetContainerConfig = () => {
-  containerConfig.value = {
-    ports: [],
-    volumes: [],
-    envFiles: [],
-    envs: []
-  }
-}
 
 watch(() => props.modelValue, (newValue: boolean) => {
   if (newValue) {
@@ -165,9 +155,20 @@ watch(() => props.modelValue, (newValue: boolean) => {
 
 watch(() => props.containerConfig, (newConfig) => {
   if (newConfig) {
-    containerConfig.value = { ...newConfig };
+    localContainerConfig.value = { ...newConfig };
   }
 }, { immediate: true, deep: true });
+
+onMounted(() => {
+  localContainerConfig.value = props.containerConfig ?
+      { ...props.containerConfig }
+      : {
+        ports: [],
+        volumes: [],
+        envFiles: [],
+        envs: []
+      };
+});
 </script>
 
 <style scoped>

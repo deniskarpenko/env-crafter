@@ -12,13 +12,13 @@
               @update:model-value="handleImageRowUpdate(config, $event)"
               @click:settings="showSettings"
           ></images-row>
-          <settings-dialog
-              title="Settings"
-              :model-value="isShowSettingsDialog"
-              :container-config="getContainerConfigFromModel(config.type)"
-              @close="handleClose"
-          ></settings-dialog>
         </div>
+        <settings-dialog
+            title="Settings"
+            :model-value="isShowSettingsDialog"
+            :container-config="getContainerConfigFromModel"
+            @close="handleClose"
+        ></settings-dialog>
       </template>
       <template #result>
         <div>!!!!</div>
@@ -114,12 +114,12 @@ const handleClose = async (config: ContainerConfig) => {
   selectedRow.value = null
 };
 
-const getContainerConfigFromModel = (imageType: ImageTypes): ContainerConfig | null => {
-  if (!(imageType in appModel)) {
+const getContainerConfigFromModel = (): ContainerConfig | null => {
+  if (selectedRow.value === null || !(selectedRow.value in appModel)) {
     return null;
   }
 
-  const propertyName = imageType as keyof Application;
+  const propertyName = selectedRow.value as keyof Application;
 
   if (appModel[propertyName] === null) {
     return null;
