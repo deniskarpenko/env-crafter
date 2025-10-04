@@ -16,7 +16,7 @@
         <settings-dialog
             title="Settings"
             :model-value="isShowSettingsDialog"
-            :container-config="getContainerConfigFromModel"
+            :container-config="selectedContainer"
             @close="handleClose"
         ></settings-dialog>
       </template>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref, onMounted, nextTick} from "vue";
+import {reactive, ref, onMounted, nextTick, watch} from "vue";
 import {GetAllImages} from "../../wailsjs/go/main/App";
 import {Application, ContainerConfig, ImageWithTagConfig} from "../types/Application";
 import {ImageOption} from "../types/ImageOption";
@@ -57,6 +57,8 @@ const appModel = reactive<Application>({
 const imagesOptions = ref<ImageOption[]>([]);
 const isShowSettingsDialog = ref(false);
 const selectedRow = ref<ImageTypes | null>(null);
+const selectedContainer = ref<ContainerConfig | null>(null);
+
 
 const { configs: imageRowConfig } = useImageManagers(imagesOptions);
 
@@ -89,6 +91,14 @@ const handleImageRowUpdate = (config: any, value: ImageWithTag) => {
 const showSettings = (type: ImageTypes) => {
   selectedRow.value = type;
   isShowSettingsDialog.value = true;
+
+  const propertyName = selectedRow.value as keyof Application;
+
+  if (appModel[propertyName] === null) {
+    return;
+  }
+
+  selectedContainer.value = appModel[propertyName]!.config;
 };
 
 const handleClose = async (config: ContainerConfig) => {
@@ -111,22 +121,7 @@ const handleClose = async (config: ContainerConfig) => {
   }
 
   isShowSettingsDialog.value = false;
-  selectedRow.value = null
 };
-
-const getContainerConfigFromModel = (): ContainerConfig | null => {
-  if (selectedRow.value === null || !(selectedRow.value in appModel)) {
-    return null;
-  }
-
-  const propertyName = selectedRow.value as keyof Application;
-
-  if (appModel[propertyName] === null) {
-    return null;
-  }
-
-  return appModel[propertyName]!.config;
-}
 
 onMounted(async () => {
   imagesOptions.value = await GetAllImages();
