@@ -33,7 +33,7 @@
             <div><span>Env files</span></div>
             <input-plus
                 type="file"
-                :inputs="localContainerConfig.envFiles"
+                :inputs="localContainerConfig?.envFiles"
                 @update-inputs="handleUpdateEnvFiles"
             />
             <div><span>Env variables</span></div>
@@ -41,7 +41,7 @@
             <input-plus
                 type="text"
                 error-message="Format should be 'string=string'(e.g., NODE_ENV=production)"
-                :inputs="localContainerConfig.envs"
+                :inputs="localContainerConfig?.envs"
                 :validate-input="(value: string) => validate(value, 'envs')"
                 @update-inputs="handleUpdateEnvs"
             />
@@ -154,9 +154,12 @@ watch(() => props.modelValue, (newValue: boolean) => {
 });
 
 watch(() => props.containerConfig, (newConfig) => {
-  if (newConfig) {
-    localContainerConfig.value = { ...newConfig };
-  }
+  localContainerConfig.value = newConfig ? { ...newConfig } : {
+    ports: [],
+    volumes: [],
+    envFiles: [],
+    envs: []
+  };
 }, { immediate: true, deep: true });
 
 onMounted(() => {

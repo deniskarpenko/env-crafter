@@ -88,13 +88,15 @@ const handleImageRowUpdate = (config: any, value: ImageWithTag) => {
   }
 };
 
-const showSettings = (type: ImageTypes) => {
+const showSettings = async (type: ImageTypes) => {
+  await nextTick();
   selectedRow.value = type;
   isShowSettingsDialog.value = true;
 
   const propertyName = selectedRow.value as keyof Application;
 
-  if (appModel[propertyName] === null) {
+  if (appModel[propertyName] === null || appModel[propertyName] === undefined) {
+    selectedContainer.value = null;
     return;
   }
 
@@ -121,6 +123,8 @@ const handleClose = async (config: ContainerConfig) => {
   }
 
   isShowSettingsDialog.value = false;
+
+  selectedContainer.value = config;
 };
 
 onMounted(async () => {
