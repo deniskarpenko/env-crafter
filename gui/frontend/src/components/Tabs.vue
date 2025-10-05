@@ -17,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import {Tab} from "../types/Tabs/Tab";
-import {computed, ref} from "vue";
+import {computed, onUnmounted, ref, watch} from "vue";
 
 interface Props {
   tabs: Tab[],
@@ -43,6 +43,12 @@ const setActiveTab = (index: number) => {
 }
 
 const currentTab = computed(() => props.tabs[activeTab.value])
+
+watch(() => props.defaultTab, (newDefault) => {
+  activeTab.value = newDefault;
+}, { immediate: true });
+
+onUnmounted(() => activeTab.value = props.defaultTab);
 </script>
 <style lang="css">
 .tabs {

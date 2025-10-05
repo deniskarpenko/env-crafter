@@ -6,7 +6,11 @@
         <button type="button" @click="handleManualClose" class="close-button">x</button>
       </header>
       <main class="dialog-content">
-        <tabs :tabs="tabsConfig">
+        <tabs
+            :key="dialogKey"
+            :tabs="tabsConfig"
+            :default-tab="defaultTab"
+        >
           <template #ports>
             <div><span>Ports</span></div>
             <div>Format: 'outside:inside' (e.g., 8080:80 means "access port 8080 on your computer to reach port 80 in container")</div>
@@ -80,11 +84,13 @@ const tabsConfig = [
 
 const dialogRef = ref<null | HTMLDialogElement>(null);
 const isClosing = ref(false);
+const dialogKey = ref(0);
 
 const openDialog = async () => {
   await nextTick();
   if (dialogRef.value && !dialogRef.value.open) {
     isClosing.value = false;
+    dialogKey.value++; // Сбрасываем компонент Tabs
     dialogRef.value.showModal();
   }
 };
@@ -110,6 +116,8 @@ const handleDialogClose = () => {
     emit("close", localContainerConfig.value);
   }
 };
+
+const defaultTab = 0;
 
 const localContainerConfig = ref<ContainerConfig>({
   ports: [],
