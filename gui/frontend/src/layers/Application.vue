@@ -24,7 +24,7 @@
         <div>!!!!</div>
       </template>
     </Tabs>
-    <div class="buttons-containers">
+    <div class="buttons-containers" @click="handleBuild">
       <button>Build</button>
     </div>
   </div>
@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import {reactive, ref, onMounted, nextTick, watch} from "vue";
 import {GetAllImages} from "../../wailsjs/go/main/App";
-import {Application, ContainerConfig, ImageWithTagConfig} from "../types/Application";
+import {ContainerConfig, ImageWithTagConfig, Project} from "../types/Application";
 import {ImageOption} from "../types/ImageOption";
 import Tabs from "../components/Tabs.vue";
 import ImagesRow from "../components/ImagesRow.vue";
@@ -42,12 +42,17 @@ import SettingsDialog from "../components/dialog/SettingsDialog.vue";
 import {ImageWithTag} from "../types/ImageWithTag";
 import {ImageTypes} from "../types/ImageTypes";
 
+const emit = defineEmits<{
+  (event: 'build', app: Project): void;
+}>();
+
+
 const tabsConfig = [
   { id: 'images', title: 'Images', slot: 'images' },
   { id: 'result', title: 'Result', slot: 'result' },
 ];
 
-const appModel = reactive<Application>({
+const appModel = reactive<Project>({
   backend: null,
   sql: null,
   nosql: null,
@@ -71,7 +76,7 @@ const handleImageRowUpdate = (config: any, value: ImageWithTag) => {
     return;
   }
 
-  const propertyName = config.type as keyof Application;
+  const propertyName = config.type as keyof Project;
 
   if (appModel[propertyName] === null) {
     appModel[propertyName] = {
@@ -93,7 +98,7 @@ const showSettings = async (type: ImageTypes) => {
   selectedRow.value = type;
   isShowSettingsDialog.value = true;
 
-  const propertyName = selectedRow.value as keyof Application;
+  const propertyName = selectedRow.value as keyof Project;
 
   if (appModel[propertyName] === null || appModel[propertyName] === undefined) {
     selectedContainer.value = null;
@@ -111,7 +116,7 @@ const handleClose = async (config: ContainerConfig) => {
     return;
   }
 
-  const propertyName = selectedRow.value as keyof Application;
+  const propertyName = selectedRow.value as keyof Project;
 
   if (appModel[propertyName] === null) {
     appModel[propertyName] = {
@@ -126,6 +131,10 @@ const handleClose = async (config: ContainerConfig) => {
 
   selectedContainer.value = config;
 };
+
+const handleBuild = () => {
+  emit("build", appModel);
+}
 
 onMounted(async () => {
   imagesOptions.value = await GetAllImages();

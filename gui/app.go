@@ -1,13 +1,14 @@
 package main
 
 import (
-	"bitbucket.org/go-scrapper/docker-compose/pkg/db"
-	"bitbucket.org/go-scrapper/docker-compose/pkg/db/models"
 	"context"
 	"fmt"
+	"log"
+
+	"bitbucket.org/go-scrapper/docker-compose/pkg/db"
+	"bitbucket.org/go-scrapper/docker-compose/pkg/db/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"log"
 )
 
 // App struct

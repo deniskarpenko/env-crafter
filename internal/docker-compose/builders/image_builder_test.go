@@ -17,7 +17,7 @@ var getImageBuilderTests = []struct {
 			ImageName: "php",
 			Tag:       "latest",
 		},
-		wantType: reflect.TypeOf(&PHP_Image_Builder{}),
+		wantType: reflect.TypeOf(&PhpImageBuilder{}),
 	},
 }
 

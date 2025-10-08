@@ -48,7 +48,7 @@ Spinning up dev environments with Docker should be fast and painless. Whether yo
 In the meantime:
 
 ```bash
-git clone https://github.com/yourusername/env-crafter.git
+git clone https://github.com/deniskarpenko/env-crafter.git
 cd env-crafter/
 
  go run .\migrations\migrate.go

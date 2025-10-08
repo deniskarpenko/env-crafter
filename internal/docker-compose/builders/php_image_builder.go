@@ -10,9 +10,9 @@ const envPhp = "php.env"
 
 const dockerFileName = "php.Dockerfile"
 
-type PHP_Image_Builder struct{}
+type PhpImageBuilder struct{}
 
-func (b *PHP_Image_Builder) Create(info *ServiceInfo) (Service, error) {
+func (b *PhpImageBuilder) Create(info *ServiceInfo) (Service, error) {
 	content := b.getDockerfileContent(info)
 
 	dockerFileBuilder := DockerfileBuilder{}
@@ -72,7 +72,7 @@ func (b *PHP_Image_Builder) Create(info *ServiceInfo) (Service, error) {
 	}, nil
 }
 
-func (b *PHP_Image_Builder) getDockerfileContent(info *ServiceInfo) string {
+func (b *PhpImageBuilder) getDockerfileContent(info *ServiceInfo) string {
 	return fmt.Sprintf(`
 FROM %s:%s AS builder
 

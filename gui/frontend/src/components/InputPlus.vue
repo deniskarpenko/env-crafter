@@ -9,12 +9,12 @@
 />
   <input
       v-else
-      v-model="input.value"
       :type="type"
-      :class="['input-field', { 'input-error': !input.isValid && input.value !== '' }]"
+      class="input-field"
       @input="updateInputValue(index)"
       accept=".env"
       multiple
+      :ref="(el) => fileInputRefs[index] = el as HTMLInputElement | null"
   />
   <button v-if="index > 0" type="button" @click="removeInput(index)">x</button>
   <div v-if="!input.isValid && input.value !== ''" class="error-message">
@@ -43,6 +43,7 @@ const emit = defineEmits<{
 }>();
 
 const localInputs = ref<InputItem[]>([]);
+const fileInputRefs = ref<(HTMLInputElement | null)[]>([]);
 
 const nextId = ref(
     Math.max(...localInputs.value.map(item => item.id), 0) + 1
@@ -80,6 +81,8 @@ const updateInputValue = (index: number): void => {
       .map((input: InputItem) => input.value)
   );
 }
+
+const handleFileChanged = (files: File[]) => {}
 
 onMounted(() => {
   if (props.inputs.length === 0) {

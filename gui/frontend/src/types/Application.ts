@@ -15,7 +15,7 @@ export interface ImageWithTagConfig {
 
 }
 
-export interface Application {
+export interface Project {
     backend: ImageWithTagConfig | null;
     sql: ImageWithTagConfig | null;
     nosql: ImageWithTagConfig | null;

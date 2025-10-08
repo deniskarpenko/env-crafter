@@ -11,7 +11,7 @@ type ImageBuilder interface {
 func GetImageBuilderByImageName(info ServiceInfo) (ImageBuilder, error) {
 	switch info.ImageName {
 	case "php":
-		return &PHP_Image_Builder{}, nil
+		return &PhpImageBuilder{}, nil
 	case "mysql":
 		return &SQLBuilder{}, nil
 	case "postgres":
