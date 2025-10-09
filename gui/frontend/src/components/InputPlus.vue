@@ -11,10 +11,10 @@
       v-else
       :type="type"
       class="input-field"
-      @input="updateInputValue(index)"
       accept=".env"
       multiple
       :ref="(el) => fileInputRefs[index] = el as HTMLInputElement | null"
+      @change="(event) => handleFileChanged(event, index)"
   />
   <button v-if="index > 0" type="button" @click="removeInput(index)">x</button>
   <div v-if="!input.isValid && input.value !== ''" class="error-message">
@@ -40,6 +40,7 @@ const props = withDefaults(defineProps<Props>(),{
 
 const emit = defineEmits<{
   (event: 'updateInputs', values: string[]): void;
+  (event: 'updateFiles', values: File[]): void;
 }>();
 
 const localInputs = ref<InputItem[]>([]);
@@ -82,7 +83,17 @@ const updateInputValue = (index: number): void => {
   );
 }
 
-const handleFileChanged = (files: File[]) => {}
+const handleFileChanged = (event: Event, index: number): void => {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0] || null;
+  const input = localInputs.value[index];
+
+  if (input === undefined) {
+    return;
+  }
+
+  console.log(localInputs.value);
+}
 
 onMounted(() => {
   if (props.inputs.length === 0) {
