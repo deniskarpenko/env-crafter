@@ -4,7 +4,7 @@ import {ImageWithTag} from "./ImageWithTag";
 export interface ContainerConfig {
     ports: string[];
     volumes: string[];
-    envFiles: string[];
+    envFiles: File[];
     envs: string[];
 
 }

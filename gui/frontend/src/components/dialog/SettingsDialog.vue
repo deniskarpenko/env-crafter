@@ -38,7 +38,7 @@
             <input-plus
                 type="file"
                 :inputs="localContainerConfig?.envFiles"
-                @update-inputs="handleUpdateEnvFiles"
+                @update-files="handleUpdateEnvFiles"
             />
             <div><span>Env variables</span></div>
             <div>Format: 'variable=value'</div>
@@ -144,7 +144,7 @@ const handleUpdateVolumes = (volumes: string[]) => {
   localContainerConfig.value.volumes = volumes;
 };
 
-const handleUpdateEnvFiles = (envFiles: string[]) => {
+const handleUpdateEnvFiles = (envFiles: File[]) => {
   localContainerConfig.value.envFiles = envFiles;
 };
 

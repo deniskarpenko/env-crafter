@@ -32,6 +32,7 @@ interface Props {
   errorMessage?: string;
   validateInput?: (value: string) => boolean;
   inputs?: string[];
+  inputFiles?: File[];
 }
 
 const props = withDefaults(defineProps<Props>(),{
@@ -92,7 +93,11 @@ const handleFileChanged = (event: Event, index: number): void => {
     return;
   }
 
-  console.log(localInputs.value);
+  input.file = file;
+
+  emit('updateFiles', localInputs.value
+      .filter(input => input.file !== null)
+      .map((input: InputItem) => input.file!));
 }
 
 onMounted(() => {
