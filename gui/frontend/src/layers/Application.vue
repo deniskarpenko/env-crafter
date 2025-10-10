@@ -20,9 +20,6 @@
             @close="handleClose"
         ></settings-dialog>
       </template>
-      <template #result>
-        <div>!!!!</div>
-      </template>
     </Tabs>
     <div class="buttons-containers" @click="handleBuild">
       <button>Build</button>

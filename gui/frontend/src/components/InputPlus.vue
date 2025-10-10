@@ -31,8 +31,7 @@ interface Props {
   type: InputType;
   errorMessage?: string;
   validateInput?: (value: string) => boolean;
-  inputs?: string[];
-  inputFiles?: File[];
+  inputs?: string[] | File[];
 }
 
 const props = withDefaults(defineProps<Props>(),{
@@ -106,10 +105,16 @@ onMounted(() => {
     return;
   }
 
-  props.inputs.forEach(input => {
-    const isValid = props.validateInput !== undefined ? props.validateInput(input) : true;
-    localInputs.value.push({id: nextId.value, value: input, isValid: isValid, errorMessage: props.errorMessage});
-  });
+  if (props.type === 'file') {
+    props.inputs.forEach(input => {
+      localInputs.value.push({id: nextId.value, value: "", file: input as File,isValid: true, errorMessage: props.errorMessage});
+    });
+  } else {
+    props.inputs.forEach(input => {
+      const isValid = props.validateInput !== undefined ? props.validateInput(input as string) : true;
+      localInputs.value.push({id: nextId.value, value: input as string, isValid: isValid, errorMessage: props.errorMessage});
+    });
+  }
 })
 
 </script>
