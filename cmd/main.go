@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bitbucket.org/go-scrapper/docker-compose/internal/docker-compose"
-	"bitbucket.org/go-scrapper/docker-compose/internal/docker-compose/builders"
+	"bitbucket.org/go-scrapper/docker-compose/internal/builders"
+	"bitbucket.org/go-scrapper/docker-compose/internal/builders/builders"
 	"fmt"
 	"log"
 	"log/slog"

@@ -59,3 +59,7 @@ func (a *App) GetTagByImageId(imageId int) []models.Tag {
 
 	return tags
 }
+
+func (a *App) Build() {
+
+}

@@ -1,7 +1,7 @@
 package docker
 
 import (
-	"bitbucket.org/go-scrapper/docker-compose/internal/docker-compose/builders"
+	"bitbucket.org/go-scrapper/docker-compose/internal/builders/builders"
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"log/slog"
