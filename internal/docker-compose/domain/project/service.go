@@ -7,5 +7,7 @@ type Service struct {
 	build         *valueobjects.Build
 	ports         []valueobjects.Port
 	volumes       []valueobjects.Volume
+	environment   []valueobjects.Env
+	envFiles      []valueobjects.EnvFile
 	containerName string
 }
