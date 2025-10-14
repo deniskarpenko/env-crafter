@@ -3,12 +3,12 @@ package builders
 type ServiceInfo struct {
 	ImageName   string
 	Tag         string
+	ServiceType ServiceType
 	Ports       []RelatedPorts
 	Volumes     []Volume
 	Networks    []string
 	Envs        []string
 	DependsOn   []string
-	ServiceType ServiceType
 }
 
 type RelatedPorts struct {

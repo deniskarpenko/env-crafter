@@ -6,12 +6,12 @@ import (
 
 func TestNewImage(t *testing.T) {
 	tests := []struct {
+		expected  Image
 		name      string
 		imageName string
 		tag       string
-		expected  Image
-		expectErr bool
 		errorMsg  string
+		expectErr bool
 	}{
 		{
 			name:      "creates image with valid name and tag",

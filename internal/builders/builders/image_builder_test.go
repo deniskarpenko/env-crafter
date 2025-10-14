@@ -6,9 +6,9 @@ import (
 )
 
 var getImageBuilderTests = []struct {
+	wantType   reflect.Type
 	imageName  string
 	imageInfo  ServiceInfo
-	wantType   reflect.Type
 	shouldFail bool
 }{
 	{
