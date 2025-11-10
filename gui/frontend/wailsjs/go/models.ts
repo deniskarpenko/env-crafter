@@ -4,8 +4,8 @@ export namespace models {
 	    image_id: string;
 	    image: string;
 	    docker_image: string;
-	    is_dockerfile: boolean;
 	    image_type: string;
+	    is_dockerfile: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new Image(source);
@@ -16,14 +16,14 @@ export namespace models {
 	        this.image_id = source["image_id"];
 	        this.image = source["image"];
 	        this.docker_image = source["docker_image"];
-	        this.is_dockerfile = source["is_dockerfile"];
 	        this.image_type = source["image_type"];
+	        this.is_dockerfile = source["is_dockerfile"];
 	    }
 	}
 	export class Tag {
+	    TagName: string;
 	    tag_id: number;
 	    image_id: number;
-	    TagName: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Tag(source);
@@ -31,9 +31,9 @@ export namespace models {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.TagName = source["TagName"];
 	        this.tag_id = source["tag_id"];
 	        this.image_id = source["image_id"];
-	        this.TagName = source["TagName"];
 	    }
 	}
 
