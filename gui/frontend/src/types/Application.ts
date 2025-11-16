@@ -20,5 +20,8 @@ export interface Project {
     sql: ImageWithTagConfig | null;
     nosql: ImageWithTagConfig | null;
     web: ImageWithTagConfig | null;
+}
 
+export interface ApplicationConfig {
+    projects: Project[];
 }

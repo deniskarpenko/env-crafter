@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import {reactive, ref, onMounted, nextTick, watch} from "vue";
 import {GetAllImages} from "../../wailsjs/go/main/App";
-import {ContainerConfig, ImageWithTagConfig, Project} from "../types/Application";
+import {ContainerConfig, Project} from "../types/Application";
 import {ImageOption} from "../types/ImageOption";
 import Tabs from "../components/Tabs.vue";
 import ImagesRow from "../components/ImagesRow.vue";
@@ -38,9 +38,11 @@ import {useImageManagers} from "../composables/ImageManager";
 import SettingsDialog from "../components/dialog/SettingsDialog.vue";
 import {ImageWithTag} from "../types/ImageWithTag";
 import {ImageTypes} from "../types/ImageTypes";
+import {main} from "../../wailsjs/go/models";
+import ProjectConfig = main.ProjectConfig;
 
 const emit = defineEmits<{
-  (event: 'build', app: Project): void;
+  (event: 'build', app: ProjectConfig): void;
 }>();
 
 
@@ -130,7 +132,9 @@ const handleClose = async (config: ContainerConfig) => {
 };
 
 const handleBuild = () => {
-  emit("build", appModel);
+  const projectConfig = new ProjectConfig(appModel);
+
+  emit("build", projectConfig);
 }
 
 onMounted(async () => {
