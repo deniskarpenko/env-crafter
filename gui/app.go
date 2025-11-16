@@ -61,5 +61,5 @@ func (a *App) GetTagByImageId(imageId int) []models.Tag {
 }
 
 func (a *App) Build(app ApplicationConfig) {
-
+	fmt.Println(app)
 }

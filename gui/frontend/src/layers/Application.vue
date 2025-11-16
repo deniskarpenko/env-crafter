@@ -132,6 +132,8 @@ const handleClose = async (config: ContainerConfig) => {
 };
 
 const handleBuild = () => {
+  console.log("handleBuild");
+  console.log(appModel);
   const projectConfig = new ProjectConfig(appModel);
 
   emit("build", projectConfig);
