@@ -38,11 +38,9 @@ import {useImageManagers} from "../composables/ImageManager";
 import SettingsDialog from "../components/dialog/SettingsDialog.vue";
 import {ImageWithTag} from "../types/ImageWithTag";
 import {ImageTypes} from "../types/ImageTypes";
-import {main} from "../../wailsjs/go/models";
-import ProjectConfig = main.ProjectConfig;
 
 const emit = defineEmits<{
-  (event: 'build', app: ProjectConfig): void;
+  (event: 'build', app: Project): void;
 }>();
 
 
