@@ -22,8 +22,6 @@ const handleBuild = (project : Project): void => {
 
  app.projects.push(projectConfig);
 
- console.log("PROJECT");
-
   Build(app);
 }
 </script>

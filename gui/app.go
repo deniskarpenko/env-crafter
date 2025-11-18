@@ -7,6 +7,7 @@ import (
 
 	"bitbucket.org/go-scrapper/docker-compose/pkg/db"
 	"bitbucket.org/go-scrapper/docker-compose/pkg/db/models"
+	buildService "bitbucket.org/go-scrapper/docker-compose/pkg/docker-compose/application/service"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -61,5 +62,8 @@ func (a *App) GetTagByImageId(imageId int) []models.Tag {
 }
 
 func (a *App) Build(app ApplicationConfig) {
-	fmt.Println(app)
+	service := buildService.NewBuildService()
+
+	service.
+		fmt.Println(app)
 }
