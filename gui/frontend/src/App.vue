@@ -8,22 +8,21 @@ import {main} from "../wailsjs/go/models";
 import ApplicationConfig = main.ApplicationConfig;
 import {Project} from "./types/Application";
 import ProjectConfig = main.ProjectConfig;
+import {toProjectConfig} from "./utils/configConverter";
 
 const handleBuild = (project : Project): void => {
 
  const app = new ApplicationConfig();
 
- const projectConfig = new ProjectConfig({
-   backend: {
-     name: project.backend?.image?.image
-   }
- });
+ const projectConfig = toProjectConfig(project)
 
  if (!app.projects) {
    app.projects = [];
  }
 
- app.projects.push(project);
+ app.projects.push(projectConfig);
+
+ console.log("PROJECT");
 
   Build(app);
 }

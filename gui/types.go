@@ -8,7 +8,7 @@ type ImageWithTag struct {
 type ContainerConfig struct {
 	Ports    []string `json:"ports"`
 	Volumes  []string `json:"volumes"`
-	EnvFiles []string `json:"envFiles"` // В Go файлы передаются как пути (строки)
+	EnvFiles [][]byte `json:"envFiles"` // В Go файлы передаются как пути (строки)
 	Envs     []string `json:"envs"`
 }
 

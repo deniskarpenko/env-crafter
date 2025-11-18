@@ -3,7 +3,7 @@ export namespace main {
 	export class ContainerConfig {
 	    ports: string[];
 	    volumes: string[];
-	    envFiles: string[];
+	    envFiles: number[][];
 	    envs: string[];
 	
 	    static createFrom(source: any = {}) {
